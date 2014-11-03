@@ -23,7 +23,7 @@ BEGIN {
 	}
 
 	# count multi-row number
-	multi_row_name = gensub(/^<td>(.+) #[[:digit:]]<\/td>$/, "\\1", "", $0)
+	multi_row_name = gensub(/^<td>(.+) #[[:digit:]]+<\/td>$/, "\\1", "", $0)
 	if ( multi_row_name != $0 ) {
 		multi_row_count[multi_row_name]++
 	}
@@ -62,7 +62,7 @@ BEGIN {
 	# 	2. has not been modified
 	#
 
-	res = gensub(/^<td>(.+) #[[:digit:]]<\/td>$/, "\\1", "", $0)
+	res = gensub(/^<td>(.+) #[[:digit:]]+<\/td>$/, "\\1", "", $0)
 
 	# not match, print entire line immdiately
 	if ( res == $0 ) {
