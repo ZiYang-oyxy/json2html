@@ -10,7 +10,7 @@
 ME=`readlink -f $BASH_SOURCE`
 P=`dirname $ME`
 
-export LUA_PATH="$P/lib/?.lua;;"
+export LUA_PATH="$P/?.lua;$P/lib/?.lua;;"
 export LUA_CPATH="$P/lib/?.so;;"
 
 usage() {

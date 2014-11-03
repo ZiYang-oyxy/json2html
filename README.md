@@ -66,7 +66,7 @@ TH=;Feature;Sub-Feature;Value;
 *The file is `test/spec.json.html`*
 
 ## How to use
-- Compile [nixio.so](https://github.com/hh123okbb/nixio) if necessary. The `nixio.so` in this repository is for x86-64
+- Compile [nixio.so](https://github.com/hh123okbb/nixio) and [Lua](https://github.com/hh123okbb/lua).
 
 - CLI interface
 
@@ -83,8 +83,10 @@ TH=;Feature;Sub-Feature;Value;
 	* `TITLE=`: Give the table a caption
 	* `TH=;`: Declare the table headers. Each entry must ends with a `;`
 
-- Lua library: Load lua2html.lua and include the libraries in `lib`. *Maybe you should setup your lua environment. Please refer to `json2html.sh`*
+- Lua library: Load lua2html.lua and include the libraries in `lib`. *Maybe you should setup your lua environment. Refer to `json2html.sh`*
 
+## TODO
+- Strip `nixio` dependencies
 
 ## Thanks
 Lua common libraries (located in `lib/`) are stolen from [LuCI](http://luci.subsignal.org/) project.
