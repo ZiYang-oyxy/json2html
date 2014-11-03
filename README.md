@@ -3,7 +3,7 @@
 ## Feature
 - **Works with `rowspan`**
 - Convert JSON data(with extended markup declaration) to HTML table
-- library lua2html.lua for Lua table conversion
+- Library lua2html.lua for Lua table conversion
 - Pad empty cell automatically. Keep the table always in regular
 - Quickly generate a table with css from CLI. Good for my spec document writing
 
@@ -71,12 +71,14 @@ TH=;Feature;Sub-Feature;Value;
 - CLI interface
 
 	```
-	Usage: ./json2html.sh <JSON_FILE> [-c CSS_FILE] [-P]
+	Usage: ./json2html.sh [-c CSS_FILE] [-H] [-P] <JSON_FILE>
 
 	Options:
 		-c     css for table
-		-P     don't run pp.awk for pretty print (merge the same type of <td>),
-			   so that you can use your own script to decorate the html table
+		-H     don't output other HTML elements, just output HTML table elements
+		-P     don't run pp.awk for pretty print (this script will use rowspan
+			   to merge the same type of <td> elements), so that you can use
+			   your own script to decorate the table or just import it to excel
 	```
 
 - JSON file syntax

@@ -77,6 +77,11 @@ if not css then
 end
 f:close()
 
+local pure_tbl = false
+if arg[3] == "1" then
+	pure_tbl = true
+end
+
 -- html resouce
 ----------------
 local header = [[
@@ -104,12 +109,22 @@ local footer = [[</table></body></html>]]
 -- output
 ---------
 
-print(string.format(header, title or "html2json table", css or ""))
-if title then
-	print(string.format(caption, title))
+if pure_tbl then
+	print("<table>")
+	for i, v in ipairs(th_tlb) do
+		lua2html.th(v)
+	end
+	print(lua2html.trtd("", nil, lua_tbl))
+	print("</table>")
+	return 0
+else
+	print(string.format(header, title or "html2json table", css or ""))
+	if title then
+		print(string.format(caption, title))
+	end
+	for i, v in ipairs(th_tlb) do
+		lua2html.th(v)
+	end
+	print(lua2html.trtd("", nil, lua_tbl))
+	print(footer)
 end
-for i, v in ipairs(th_tlb) do
-	lua2html.th(v)
-end
-print(lua2html.trtd("", nil, lua_tbl))
-print(footer)

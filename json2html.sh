@@ -15,49 +15,51 @@ export LUA_CPATH="$P/lib/?.so;;"
 
 usage() {
 	cat <<EOF
-Usage: $0 <JSON_FILE> [-c CSS_FILE] [-P]
+Usage: $0 [-c CSS_FILE] [-H] [-P] <JSON_FILE>
 
 Options:
     -c     css for table
-    -P     don't run pp.awk for pretty print (merge the same type of <td>),
-           so that you can use your own script to decorate the html table
+    -H     don't output other HTML elements, just output HTML table elements
+    -P     don't run pp.awk for pretty print (this script will use rowspan
+           to merge the same type of <td> elements), so that you can use
+           your own script to decorate the table or just import it to excel
 EOF
 }
 
 JSON_FILE=
 CSS_FILE=
 PRETTY_PRINT=true
+PURE_TBL="0"
 
-if [ -z "$1" ] || [ "$1" = "-h" ]; then
-	usage
-	exit 1
-fi
+[ -z "$1" ] && usage && exit 1
 
-while [ -n "$1" ]; do
-	if [ "$1" = "-c" ]; then
-		shift
-		CSS_FILE="$1"
-		shift
-	fi
+while getopts ":PHc:h" opt
+do
+  case $opt in
+	h ) usage; exit 0;;
 
-	if [ "$1" = "-P" ]; then
-		PRETTY_PRINT=false
-		shift
-	fi
+	P ) PRETTY_PRINT=false;;
 
-	if [ -n "$1" ]; then
-		JSON_FILE="$1"
-		shift
-	fi
+	H ) PURE_TBL="1";;
+
+	c ) echo "$OPTARG";CSS_FILE="$OPTARG";;
+
+	\? ) echo -e "\n  Option does not exist : $OPTARG\n"
+			usage; exit 1;;
+  esac
 done
+shift $(($OPTIND-1))
+
+JSON_FILE=$1
 
 if [ -z "$CSS_FILE" ]; then
 	CSS_FILE=$P/default.css
 fi
 
 if $PRETTY_PRINT ;then
-	$P/html_gen.lua $JSON_FILE $CSS_FILE > /tmp/json2html.tmp
+	$P/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL > /tmp/json2html.tmp
 	$P/pp.awk /tmp/json2html.tmp /tmp/json2html.tmp
+	rm /tmp/json2html.tmp
 else
-	$P/html_gen.lua $JSON_FILE $CSS_FILE
+	$P/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL
 fi
