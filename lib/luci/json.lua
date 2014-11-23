@@ -39,7 +39,7 @@ Encoder:
 		luci.ltn12.pump.all(encoder:source(), luci.ltn12.sink.file(io.open("someFile", w)))
 ]]--
 
-local nixio     = require "nixio"
+-- local nixio     = require "nixio"
 local util      = require "luci.util"
 local table     = require "table"
 local string    = require "string"
@@ -55,9 +55,9 @@ local ipairs    = ipairs
 local next      = next
 local pcall		= pcall
 
-local band      = nixio.bit.band
-local bor       = nixio.bit.bor
-local rshift    = nixio.bit.rshift
+-- local band      = nixio.bit.band
+-- local bor       = nixio.bit.bor
+-- local rshift    = nixio.bit.rshift
 local char      = string.char
 
 local getmetatable = getmetatable

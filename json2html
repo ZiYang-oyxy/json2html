@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# Convert json to html table
+#
+# Author: OuyangXY <hh123okbb@gmail.com>
+#
+# Changes:
+#       OuyangXY: Create file, 2014-11-01
+
+ME=`readlink -f $BASH_SOURCE`
+P=`dirname $ME`
+
+export LUA_PATH="$P/?.lua;$P/lib/?.lua;;"
+export LUA_CPATH="$P/lib/?.so;;"
+
+usage() {
+	cat <<EOF
+Usage: $0 [-HCRP] [-c CSS_FILE] <JSON_FILE>
+
+Options:
+    -c     CSS for table
+    -H     Don't output other HTML elements, just output HTML table elements
+    -C     Don't keep the table in concise. Means that pp.awk will never
+           hide any column which is stand for array index
+    -R     Don't keep the table regular. Means no padding cell - "N/A"
+    -P     Don't run pp.awk for pretty print (this script will use rowspan
+           to merge the same type of <td> elements), so that you can use
+           your own script to decorate the table or just export it to excel.
+           NOTE: In this mode, "-C" and "-R" is also enabled
+EOF
+}
+
+JSON_FILE=
+CSS_FILE=
+PRETTY_PRINT=true
+CONCISE="-v concise=yes"
+PURE_TBL="0"
+REGULAR="-v regular=yes"
+
+[ -z "$1" ] && usage && exit 1
+
+while getopts ":PHc:hCR" opt
+do
+  case $opt in
+	h ) usage; exit 0;;
+
+	P ) PRETTY_PRINT=false;;
+
+	H ) PURE_TBL="1";;
+
+	c ) echo "$OPTARG";CSS_FILE="$OPTARG";;
+
+	C ) CONCISE="-v concise=no";;
+
+	R ) REGULAR="-v regular=no";;
+
+	\? ) echo -e "\n  Option does not exist : $OPTARG\n"
+			usage; exit 1;;
+  esac
+done
+shift $(($OPTIND-1))
+
+JSON_FILE=$1
+
+if [ -z "$CSS_FILE" ]; then
+	CSS_FILE=$P/module/default.css
+fi
+
+if $PRETTY_PRINT ;then
+	$P/module/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL > /tmp/json2html.tmp
+	awk --re-interval $CONCISE $REGULAR -f $P/module/pp.awk /tmp/json2html.tmp /tmp/json2html.tmp
+else
+	$P/module/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL "NO_TID"
+fi

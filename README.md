@@ -4,16 +4,19 @@
 - **Works with `rowspan`**
 - Convert JSON data(with extended markup declaration) to HTML table
 - Library lua2html.lua for Lua table conversion
-- Pad empty cell automatically. Keep the table always in regular
+- Support to pad empty cell automatically. Keep the table always pretty
+- Support to hide column of array's index
 - Quickly generate a table with css from CLI. Good for my spec document writing
 
-## Example
+## Case 1
+A default mode
 
 **Input:**
 
-```json
+`example/spec.json`:
 
-TITLE=J3H table title
+```json
+TITLE=xxx SPEC
 TH=;Feature;Sub-Feature;Value;
 
 {
@@ -24,71 +27,127 @@ TH=;Feature;Sub-Feature;Value;
     {
       "Feature B": [
         {
-          "Sub_Feature_A_a": 1
+          "Sub_Feature_B_a": 1
         },
         {
-          "Sub_Feature_A_b": 2
+          "Sub_Feature_B_b": 2
         },
         {
-          "Sub_Feature_A_c": 3
-        },
-        {
-          "Sub_Feature_A_d": null
-        },
-        {
-          "Sub_Feature_A_e": null
+          "Sub_Feature_B_c": null
         }
       ]
     },
     {
       "Feature C": [
-        "Sub_Feature_B_a",
-        "Sub_Feature_B_b",
-        "Sub_Feature_B_c"
-      ]
-    },
-    {
-      "Feature D": [
         {
-          "Sub_Feature_D_a" : true
+          "Sub_Feature_C_a" : true,
+          "Sub_Feature_C_b" : false
+        },
+        {
+          "Sub_Feature_C_c" : "aa"
         }
       ]
     }
   ]
 }
+```
 
+**Run json2html**
+
+```sh
+json2html example/spec.json > example/spec.html
 ```
 
 **Output:**
 
-![output](test/res.png)
+![output](example/spec.png)
 
-*The file is `test/spec.json.html`*
+*Screenshot for `test/spec.html`*
+
+## Case 2
+JSON with mixed tables
+
+**Input:**
+
+`example/spec2.json`:
+
+```json
+TITLE=yyy mixed tables
+
+{
+  "SPEC": {
+    "table A": [],
+    "table B": [
+      {
+        "a": 123,
+        "b": 321
+      },
+      {
+        "aa": 1000,
+        "bb": 2000
+      },
+      {
+        "ccc": null
+      }
+    ],
+    "table C": [
+      "item 1",
+      "item 2",
+      "item 3"
+    ],
+    "table D": {
+      "a": "b",
+      "c": "d"
+    }
+  }
+}
+```
+
+**Run json2html**
+
+```sh
+json2html -C -R example/spec2.json > example/spec2.html
+```
+
+**Output:**
+
+![output](example/spec2.png)
+
+*Screenshot for `test/spec2.html`*
+
+## Case 3
+Export the html table to excel
+
+1. run ``json2html -P <your_json_file> > <your_html_file>``
+2. Open `<your_html_file>` in browser and just copy them to your excel
+3. Manual the rows manually :(
 
 ## How to use
-- Compile [nixio.so](https://github.com/hh123okbb/nixio) and [Lua](https://github.com/hh123okbb/lua).
-
 - CLI interface
 
 	```
-	Usage: ./json2html.sh [-c CSS_FILE] [-H] [-P] <JSON_FILE>
+	Usage: json2html [-HCRP] [-c CSS_FILE] <JSON_FILE>
 
 	Options:
-		-c     css for table
-		-H     don't output other HTML elements, just output HTML table elements
-		-P     don't run pp.awk for pretty print (this script will use rowspan
+		-c     CSS for table
+		-H     Don't output other HTML elements, just output HTML table elements
+		-C     Don't keep the table in concise. Means that pp.awk will never
+			   hide any column which is stand for array index
+		-R     Don't keep the table regular. Means no padding cell - "N/A"
+		-P     Don't run pp.awk for pretty print (this script will use rowspan
 			   to merge the same type of <td> elements), so that you can use
-			   your own script to decorate the table or just import it to excel
+			   your own script to decorate the table or just export it to excel.
+			   NOTE: In this mode, "-C" and "-R" is also enabled
 	```
+
+- Lua library: Include the libraries in `lib/`.
 
 - JSON file syntax
 	* `TITLE=`: Give the table a caption
 	* `TH=;`: Declare the table headers. Each entry must ends with a `;`
 
-- Lua library: Load lua2html.lua and include the libraries in `lib`. *Maybe you should setup your lua environment. Refer to `json2html.sh`*
-
 ## TODO
-- Strip `nixio` dependencies
+Now the json parser can't handle utf8 character
 
 ## Thanks
-Lua common libraries (located in `lib/`) are stolen from [LuCI](http://luci.subsignal.org/) project.
+Lua common libraries (located in `lib/luci`) are stolen from [LuCI](http://luci.subsignal.org/) project.

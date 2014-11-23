@@ -1,0 +1,34 @@
+TITLE=xxx SPEC
+TH=;Feature;Sub-Feature;Value;
+
+{
+  "SPEC": [
+    {
+      "Feature A": []
+    },
+    {
+      "Feature B": [
+        {
+          "Sub_Feature_B_a": 1
+        },
+        {
+          "Sub_Feature_B_b": 2
+        },
+        {
+          "Sub_Feature_B_c": null
+        }
+      ]
+    },
+    {
+      "Feature C": [
+        {
+          "Sub_Feature_C_a" : true,
+          "Sub_Feature_C_b" : false
+        },
+        {
+          "Sub_Feature_C_c" : "aa"
+        }
+      ]
+    }
+  ]
+}

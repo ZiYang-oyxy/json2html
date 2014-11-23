@@ -1,23 +1,18 @@
 #!/usr/bin/env lua
 
-local nixio = require "nixio"
-local fs = require "nixio.fs"
 local json = require "luci.json"
 local util = require "luci.util"
 local lua2html = require "lua2html"
 
-local debug = false
+-- local dbg = true
 function d(format, ...)
-	return debug and util.perror(string.format("[J2H debug] " .. tostring(format), ...))
+	return dbg and util.perror(string.format("[J2H dbg] " .. tostring(format), ...))
 end
 
 local f, raw, css
-if not fs.access(arg[1]) or not fs.access(arg[2]) then
-	util.perror("**file could not be accessed**")
-	return 1
-end
 
 f = io.open(arg[1])
+assert(f, "**invalid json file: **"..arg[1])
 raw = f:read("*all")
 f:close()
 
@@ -36,7 +31,7 @@ if raw then
 		table.remove(th_tlb, table.maxn(th_tlb))
 
 		d("TH TABLE:")
-		if debug then
+		if dbg then
 			util.dumptable(th_tlb)
 		end
 	end
@@ -66,7 +61,7 @@ if table.maxn(util.keys(lua_tbl)) == 0 then
 	return 1
 end
 d("TABLE:")
-if debug then
+if dbg then
 	util.dumptable(lua_tbl)
 end
 
@@ -82,6 +77,10 @@ if arg[3] == "1" then
 	pure_tbl = true
 end
 
+local has_tid = true
+if arg[4] and arg[4] == "NO_TID" then
+	has_tid = false
+end
 -- html resouce
 ----------------
 local header = [[
@@ -112,9 +111,9 @@ local footer = [[</table></body></html>]]
 if pure_tbl then
 	print("<table>")
 	for i, v in ipairs(th_tlb) do
-		lua2html.th(v)
+		print(lua2html.pth(v))
 	end
-	print(lua2html.trtd("", nil, lua_tbl))
+	lua2html.l2h(lua_tbl, nil, has_tid)
 	print("</table>")
 	return 0
 else
@@ -123,8 +122,8 @@ else
 		print(string.format(caption, title))
 	end
 	for i, v in ipairs(th_tlb) do
-		lua2html.th(v)
+		print(lua2html.pth(v))
 	end
-	print(lua2html.trtd("", nil, lua_tbl))
+	print(lua2html.l2h(lua_tbl, nil, has_tid))
 	print(footer)
 end

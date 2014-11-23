@@ -1,0 +1,29 @@
+TITLE=yyy mixed tables
+
+{
+  "SPEC": {
+    "table A": [],
+    "table B": [
+      {
+        "a": 123,
+        "b": 321
+      },
+      {
+        "aa": 1000,
+        "bb": 2000
+      },
+      {
+        "ccc": null
+      }
+    ],
+    "table C": [
+      "item 1",
+      "item 2",
+      "item 3"
+    ],
+    "table D": {
+      "a": "b",
+      "c": "d"
+    }
+  }
+}
