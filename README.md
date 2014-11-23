@@ -62,7 +62,7 @@ json2html example/spec.json > example/spec.html
 
 ![output](example/spec.png)
 
-*Screenshot for `test/spec.html`*
+*Screenshot for `example/spec.html`*
 
 ## Case 2
 JSON with mixed tables
@@ -113,7 +113,7 @@ json2html -C -R example/spec2.json > example/spec2.html
 
 ![output](example/spec2.png)
 
-*Screenshot for `test/spec2.html`*
+*Screenshot for `example/spec2.html`*
 
 ## Case 3
 Export the html table to excel
