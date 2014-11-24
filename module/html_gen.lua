@@ -50,7 +50,7 @@ end
 
 if not raw then
 	util.perror("**raw json data is null**")
-	return 1
+	os.exit(1)
 else
 	d("JSON DATA: %s", raw)
 end
@@ -58,7 +58,7 @@ end
 local lua_tbl = json.decode(raw, true)
 if table.maxn(util.keys(lua_tbl)) == 0 then
 	util.perror("**json decode failed**")
-	return 1
+	os.exit(1)
 end
 d("TABLE:")
 if dbg then
@@ -115,7 +115,6 @@ if pure_tbl then
 	end
 	lua2html.l2h(lua_tbl, nil, has_tid)
 	print("</table>")
-	return 0
 else
 	print(string.format(header, title or "html2json table", css or ""))
 	if title then

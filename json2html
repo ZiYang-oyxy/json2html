@@ -67,8 +67,12 @@ if [ -z "$CSS_FILE" ]; then
 fi
 
 if $PRETTY_PRINT ;then
-	$P/module/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL > /tmp/json2html.tmp
+	$P/module/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL > /tmp/json2html.tmp || {
+	exit $?
+}
 	awk --re-interval $CONCISE $REGULAR -f $P/module/pp.awk /tmp/json2html.tmp /tmp/json2html.tmp
 else
 	$P/module/html_gen.lua $JSON_FILE $CSS_FILE $PURE_TBL "NO_TID"
 fi
+
+exit $?
