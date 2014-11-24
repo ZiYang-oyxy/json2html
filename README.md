@@ -120,7 +120,7 @@ Export the html table to excel
 
 1. run ``json2html -P <your_json_file> > <your_html_file>``
 2. Open `<your_html_file>` in browser and just copy them to your excel
-3. Manual the rows manually :(
+3. Merge the rows manually :(
 
 ## How to use
 - CLI interface
